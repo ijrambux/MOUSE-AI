@@ -59,6 +59,12 @@
             background: #00d4ff11;
             color: #00d4ff;
             border: 1px solid #00d4ff33;
+            transition: all 0.3s;
+        }
+        .status-badge.error {
+            color: #ff6b6b;
+            border-color: #ff6b6b44;
+            background: #ff6b6b11;
         }
         /* ===== FORM ===== */
         .form-group {
@@ -340,9 +346,7 @@
 
         function setStatus(text, isOk = true) {
             statusBadge.textContent = text;
-            statusBadge.style.color = isOk ? '#00d4ff' : '#ff6b6b';
-            statusBadge.style.borderColor = isOk ? '#00d4ff33' : '#ff6b6b44';
-            statusBadge.style.background = isOk ? '#00d4ff11' : '#ff6b6b11';
+            statusBadge.className = 'status-badge' + (isOk ? '' : ' error');
         }
 
         function resetButton() {
@@ -384,14 +388,12 @@
             const file = this.files[0];
             if (!file) return;
 
-            // التحقق من الحجم (10 ميجابايت)
             if (file.size > 10 * 1024 * 1024) {
                 addLog('❌ الصورة كبيرة جداً (الحد الأقصى 10 ميجابايت)', 'error');
                 this.value = '';
                 return;
             }
 
-            // التحقق من الصيغة
             const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
             if (!validTypes.includes(file.type)) {
                 addLog('❌ صيغة غير مدعومة. استخدم JPG, PNG, GIF, BMP, WEBP', 'error');
@@ -445,7 +447,7 @@
                 const response = await fetch(`${API_BASE}/generate`, {
                     method: 'POST',
                     body: formData,
-                    signal: AbortSignal.timeout(310000) // 5 دقائق و10 ثواني
+                    signal: AbortSignal.timeout(310000)
                 });
 
                 if (response.ok) {

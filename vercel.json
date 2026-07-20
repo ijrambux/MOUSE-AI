@@ -1,14 +1,14 @@
 {
-  "functions": {
-    "api/*.py": {
-      "runtime": "python3.12",
-      "maxDuration": 300
-    }
-  },
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/app.py"
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
     }
   ]
 }
